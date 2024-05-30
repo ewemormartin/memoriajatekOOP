@@ -1,43 +1,50 @@
-export default class Kartya{
-        /* Megjeleniti a képet és ha képre katt akkor meg tud fordulni.
-            Eltud rejtozni ha ketto egyformat kattintottunk. */
-    #kep="";
-    #allapot=true; // true akkor lathato, false akkor háttér
+export default class Kartya {
+    #kep = "";
+    #allapot = true; 
     #szuloElem;
     #kepElem;
-    constructor(kep, szuloElem){
-        this.#kep=kep;
-        this.#szuloElem=szuloElem;
-        this.#allapot=false;
-        this.megjelenit()
-        this.#kepElem=this.#szuloElem.childred("div:last-child").childred("img")
-        this.#kepElem.on("click",()=>{
+    #kattinthato=true;
+    constructor(kep, szuloElem) {
+        this.#kep = kep;
+        this.#szuloElem = szuloElem;
+        this.#allapot = false;
+        this.#megjelenit()
+        this.#kepElem = this.#szuloElem.children("div:last-child").children("img")
+
+        this.#kepElem.on("click", () => {
             this.setAllapot(true)
+            this.#trigger("kapcsol")
         })
+    }
+
+    #trigger(esemenynev) {
+        const e = new CustomEvent(esemenynev, { detail: this.#kep })
+        window.dispatchEvent(e)
 
     }
-    megjelenit(){
-        let txt=`
-                <div class="card col-sm-3">
-                    <img src="kepek/hatter.jpg" alt="">
-                </div>
+
+    #megjelenit() {
+        let txt = `
+            <div class="card col-sm-3">
+                <img src="kepek/hatter.jpg" alt="memóriajáték kiskép">
+            </div>
         `
-        this.#szuloElem.append(txt);
+        this.#szuloElem.append(txt)
     }
-    setAllapot(ertek){
-        if (ertek==true || ertek ==false) {
+    setAllapot(ertek) {
+        if (ertek == true || ertek == false) {
             this.#allapot = ertek
-            this.felfordit();
+            this.#felfordit()
         }
-        
-    }
 
-    felfordit(){
+    }
+    #felfordit() {
         if (this.#allapot) {
-            this.#kepElem.attr("src",this.#kep)
-        }else{
+            this.#kepElem.attr("src", this.#kep)
+        } else {
             this.#kepElem.attr("src", "kepek/hatter.jpg")
         }
+
     }
 
 }
